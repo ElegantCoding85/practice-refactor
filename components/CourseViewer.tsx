@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
-import Image from 'next/future/image'
+import Image from 'next/image'
 import type { Course, Lesson, Video } from "@prisma/client"
 import Heading from 'components/Heading'
 import EmptyState from 'components/EmptyState'
@@ -8,6 +8,7 @@ import MuxPlayer from "@mux/mux-player-react/lazy";
 import formatDuration from 'utils/formatDuration'
 import clsx from 'clsx';
 import type { UserLessonProgress } from '@prisma/client'
+import Link from "next/link";
 
 type Props = {
   course: (Course & {
@@ -82,13 +83,14 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
 
       <div>
         {course.lessons.map(lesson => (
-          <a
+          <Link
             onClick={() => setActiveLesson(lesson)}
             key={lesson.id}
             className={clsx({
               'flex gap-5 cursor-pointer hover:bg-gray-50 px-6 py-4': true,
               'bg-yellow-50': playbackId === lesson.video?.publicPlaybackId
             })}
+           href={'/'}
           >
             {lessonProgress.includes(lesson.id) && (
               <span className='absolute z-10 -translate-x-2 -translate-y-2'>
@@ -113,7 +115,7 @@ const CourseViewer = ({ course, lessonProgress = [], setLessonProgress }: Props)
               </h2>
               <p className='text-md italic text-slate-600 my-1 truncate'>{lesson.description}</p>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </div>
